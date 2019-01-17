@@ -1,5 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
-import os, json, boto3
+from flask import render_template
 
 from app import flask_app
 
