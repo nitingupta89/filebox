@@ -34,7 +34,9 @@
       xhr.onreadystatechange = () => {
         if(xhr.readyState === 4){
           if(xhr.status === 200 || xhr.status === 204){
+            alert('File uploaded successfully.');
             document.getElementById('file-url').value = url;
+            document.getElementById('file-input').value = null;
           }
           else{
             alert('Could not upload file.');
