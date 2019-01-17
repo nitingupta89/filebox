@@ -21,3 +21,4 @@ def create_app():
 
 flask_app = create_app()
 from .api.v1 import urls # noqa
+from .views import file_upload # noqa
