@@ -25,6 +25,8 @@ def create_app():
 flask_app = create_app()
 login_manager = LoginManager()
 login_manager.init_app(flask_app)
+login_manager.login_view = 'google.login'
+
 db = SQLAlchemy(flask_app)
 
 google_bp = make_google_blueprint(

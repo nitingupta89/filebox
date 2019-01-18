@@ -4,9 +4,10 @@ Flask-RESTful
 Flask-Dance[sqla]
 Flask-Security
 Flask-Login
+Flask-Script
 blinker
 Jinja2
 Werkzeug
-psycopg2-binary
+psycopg2
 Flask-SQLAlchemy
 Flask-Migrate

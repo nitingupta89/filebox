@@ -6,13 +6,12 @@ from flask_login import (
     login_user,
     logout_user
 )
-from flask_dance.consumer.backend.sqla import SQLAlchemyBackend
 from flask_dance.consumer import oauth_authorized
 from sqlalchemy.orm.exc import NoResultFound
 from app.models.user import OAuth, User
 from flask import flash
 
-from app import flask_app, db, google_bp
+from app import flask_app, db, google_bp, login_manager
 
 
 # Listen for GET requests to /upload_file
@@ -25,15 +24,24 @@ def upload_file():
     return render_template('file_upload.html')
 
 
+@flask_app.route("/")
+def home():
+    return redirect(url_for("upload_file"))
+
+
 @flask_app.route("/login/google/authorized")
 def g_authorized():
     return redirect(url_for("upload_file"))
 
 
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+
 # create/login local user on successful OAuth login
 @oauth_authorized.connect
 def google_logged_in(blueprint, token):
-    import pdb; pdb.set_trace()
     if not token:
         flash("Failed to log in with Google.", category="error")
         return False
@@ -58,7 +66,7 @@ def google_logged_in(blueprint, token):
         oauth = OAuth(
             provider=blueprint.name,
             provider_user_id=google_user_id,
-            token=token,
+            token=token
         )
 
     if oauth.user:
@@ -67,7 +75,7 @@ def google_logged_in(blueprint, token):
         # Note that if we just created this OAuth token, then it can't
         # have an associated local account yet.
         login_user(oauth.user)
-        flash("Successfully signed in with GitHub.")
+        flash("Successfully signed in with Google.")
 
     else:
         # If this OAuth token doesn't have an associated local account,
@@ -75,9 +83,10 @@ def google_logged_in(blueprint, token):
         # in that account as well, while we're at it.
         user = User(
             # Remember that `email` can be None, if the user declines
-            # to publish their email address on GitHub!
+            # to publish their email address on Google!
             email=google_info["email"],
             name=google_info["name"],
+            is_active=True
         )
         # Associate the new local user account with the OAuth token
         oauth.user = user
@@ -86,7 +95,7 @@ def google_logged_in(blueprint, token):
         db.session.commit()
         # Log in the new local user account
         login_user(user)
-        flash("Successfully signed in with GitHub.")
+        flash("Successfully signed in with Google.")
 
     # Since we're manually creating the OAuth model in the database,
     # we should return False so that Flask-Dance knows that
