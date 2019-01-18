@@ -2,6 +2,7 @@ import os
 
 import boto3
 from botocore.client import Config
+from flask_security import current_user
 
 
 def generate_presigned_post(file_name, file_type):
@@ -11,7 +12,7 @@ def generate_presigned_post(file_name, file_type):
 
     return s3.generate_presigned_post(
         Bucket = S3_BUCKET,
-        Key = file_name,
+        Key = "users/{}/{}".format(str(current_user.id), file_name),
         Fields = {"acl": "public-read", "Content-Type": file_type},
         ExpiresIn = 3600
     )

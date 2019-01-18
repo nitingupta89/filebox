@@ -8,9 +8,10 @@ from flask_login import (
 )
 from flask_dance.consumer import oauth_authorized
 from sqlalchemy.orm.exc import NoResultFound
-from app.models.user import OAuth, User
 from flask import flash
 
+from app.models.user import User
+from app.models.oauth import OAuth
 from app import flask_app, db, google_bp, login_manager
 
 

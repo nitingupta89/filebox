@@ -7,9 +7,11 @@
 
     <p id="status">Please select a file</p>
     <p><input type="file" id="file-input"></p>
-    <form method="POST" action="/submit-form/">
+    <form>
       <input type="hidden" id="file-url" name="file-url">
-      <input type="submit" value="Upload file">
+      <p><input type="text" id="file-name" name="file-name" readonly=readonly></p>
+      <p><input type="text" id="file-type" name="file-type" readonly=readonly></p>
+      <p><input type="submit" value="Upload file" id="submit-btn" disabled=disabled></p>
     </form>
 
 
@@ -18,7 +20,7 @@
     /*
       Function to carry out the actual POST request to S3 using the signed request from the Python app.
     */
-    function uploadFile(file, s3Data, url){
+    function uploadFile(file, s3Data, url, file_name, file_type){
       const xhr = new XMLHttpRequest();
       xhr.open('POST', s3Data.url);
       xhr.setRequestHeader('x-amz-acl', 'public-read');
@@ -34,8 +36,10 @@
       xhr.onreadystatechange = () => {
         if(xhr.readyState === 4){
           if(xhr.status === 200 || xhr.status === 204){
-            alert('File uploaded successfully.');
+            document.getElementById('file-name').value = file_name;
+            document.getElementById('file-type').value = file_type;
             document.getElementById('file-url').value = url;
+            document.getElementById('submit-btn').disabled = false;
             document.getElementById('file-input').value = null;
           }
           else{
@@ -58,7 +62,7 @@
         if(xhr.readyState === 4){
           if(xhr.status === 200){
             const response = JSON.parse(xhr.responseText);
-            uploadFile(file, response.data, response.url);
+            uploadFile(file, response.data, response.url, file.name, file.type);
           }
           else{
             alert('Could not get signed URL.');
@@ -81,11 +85,24 @@
       getSignedRequest(file);
     }
 
+    function createFile(evt){
+      evt.preventDefault();
+      xhr = new XMLHttpRequest();
+      xhr.onreadystatechange=function() {
+        if (request.readyState == 4 && request.status == 200) {
+          alert("File uploaded successfully");
+        }
+        xhr.open('POST', '/api/v1/assets);
+      }
+    }
+
     /*
        Bind listeners when the page loads.
     */
     (() => {
       document.getElementById('file-input').onchange = initUpload;
+
+      document.getElementById('submit-btn').addEventListener('click', createFile);
     })();
 
     </script>
