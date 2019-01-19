@@ -24,21 +24,13 @@ class Asset(db.Model):
         db.session.add(obj)
         db.session.commit()
 
-    @property
-    def serialize(self):
-       """Return object data in easily serializeable format"""
-       return {
-           'id'         : self.id,
-           'file_name'  : self.file_name,
-           'file_type'  : self.file_type,
-           'created_at' : self.dump_datetime(self.created_at),
-       }
+    @classmethod
+    def find_one(cls, **kwargs):
+        return cls.query.filter_by(**kwargs).one()
 
-    def dump_datetime(value):
-        """Deserialize datetime object into string form for JSON processing."""
-        if value is None:
-            return None
-        return [value.strftime("%Y-%m-%d"), value.strftime("%H:%M:%S")]
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
 
 
 class AssetSchema(ma.Schema):
