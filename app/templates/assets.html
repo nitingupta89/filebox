@@ -1,0 +1,63 @@
+<html>
+  <head>
+    <script src="https://code.jquery.com/jquery-3.3.1.js" crossorigin="anonymous"></script>
+  </head>
+  <body>
+
+    <h1>Your files</h1>
+
+    <hr>
+
+    <div id='files_container'>
+        <table id="file_table">
+            <tr>
+                <th>
+                    File Name
+                </th>
+                <th>
+                    File Type
+                </th>
+                <th>
+                    Action
+                </th>
+            </tr>
+        </table>
+    </div>
+
+    <script type="text/javascript">
+
+    /*
+      Function to carry out the actual POST request to S3 using the signed request from the Python app.
+    */
+
+    function fetch_files(){
+        $.ajax({
+          type: "GET",
+          url: "api/v1/assets",
+          headers: {"Content-Type": "application/json"}
+        }).done(function(data) {
+            console.log( data );
+            create_list(data);
+      });
+    }
+
+    function create_list(data) {
+        markUp = "";
+        data.forEach(function(item){
+            markUp += "<tr><td><a href="+item.file_url+">"+item.file_name+"</a></td>"
+            markUp += "<td>"+item.file_type+"</td>"
+            markUp += "<td><a href=javascript:void id=delete-file data-id="+item.id+">Delete</a></td></tr>"
+        });
+        $("table tbody").append(markUp);
+    }
+
+    /*
+       Bind listeners when the page loads.
+    */
+    (() => {
+      fetch_files();
+    })();
+
+    </script>
+  </body>
+</html>

@@ -11,3 +11,5 @@ Werkzeug
 psycopg2
 Flask-SQLAlchemy
 Flask-Migrate
+flask-marshmallow
+marshmallow-sqlalchemy

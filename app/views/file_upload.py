@@ -30,6 +30,15 @@ def home():
     return redirect(url_for("upload_file"))
 
 
+@flask_app.route("/assets")
+def assets_page():
+    if not google.authorized:
+        return redirect(url_for("google.login"))
+
+    # Show the upload_file HTML page:
+    return render_template('assets.html')
+
+
 @flask_app.route("/login/google/authorized")
 def g_authorized():
     return redirect(url_for("upload_file"))

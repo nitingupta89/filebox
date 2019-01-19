@@ -1,6 +1,6 @@
 import datetime
 
-from app import db
+from app import db, ma
 from app.models.user import User
 
 
@@ -23,3 +23,25 @@ class Asset(db.Model):
         obj = cls(**kwargs)
         db.session.add(obj)
         db.session.commit()
+
+    @property
+    def serialize(self):
+       """Return object data in easily serializeable format"""
+       return {
+           'id'         : self.id,
+           'file_name'  : self.file_name,
+           'file_type'  : self.file_type,
+           'created_at' : self.dump_datetime(self.created_at),
+       }
+
+    def dump_datetime(value):
+        """Deserialize datetime object into string form for JSON processing."""
+        if value is None:
+            return None
+        return [value.strftime("%Y-%m-%d"), value.strftime("%H:%M:%S")]
+
+
+class AssetSchema(ma.Schema):
+    class Meta:
+        # Fields to expose
+        fields = ('id', 'file_name', 'file_type', 'file_url')

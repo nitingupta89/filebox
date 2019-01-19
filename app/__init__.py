@@ -9,6 +9,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_dance.contrib.google import make_google_blueprint
 from flask_login import LoginManager
+from flask_marshmallow import Marshmallow
 
 from app.config import config
 from app.blueprint import api_bp
@@ -28,6 +29,7 @@ login_manager.init_app(flask_app)
 login_manager.login_view = 'google.login'
 
 db = SQLAlchemy(flask_app)
+ma = Marshmallow(flask_app)
 
 google_bp = make_google_blueprint(
     client_id=os.environ['GOOGLE_CLIENT_ID'],
