@@ -1,7 +1,10 @@
 import datetime
 
+from flask_security import current_user
+
 from app import db, ma
 from app.models.user import User
+from app.api.services.s3 import delete_obj
 
 
 class Asset(db.Model):
@@ -29,6 +32,8 @@ class Asset(db.Model):
         return cls.query.filter_by(**kwargs).one()
 
     def delete(self):
+        file_path = "users/{}/{}".format(current_user.id, self.file_name)
+        delete_obj(file_path)
         db.session.delete(self)
         db.session.commit()
 

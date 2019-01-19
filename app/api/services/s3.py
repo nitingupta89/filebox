@@ -16,3 +16,11 @@ def generate_presigned_post(file_name, file_type):
         Fields = {"acl": "public-read", "Content-Type": file_type},
         ExpiresIn = 3600
     )
+
+
+def delete_obj(file_path):
+    # Initialise the S3 client
+    s3 = boto3.resource("s3")
+    S3_BUCKET = os.environ.get('S3_BUCKET')
+    obj = s3.Object(S3_BUCKET, file_path)
+    obj.delete()
