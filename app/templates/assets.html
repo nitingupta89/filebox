@@ -20,6 +20,9 @@
                 <th>
                     Action
                 </th>
+                <th>
+                    Share url
+                </th>
             </tr>
         </table>
     </div>
@@ -46,10 +49,26 @@
         data.forEach(function(item){
             markUp += "<tr><td><a href="+item.file_url+">"+item.file_name+"</a></td>"
             markUp += "<td>"+item.file_type+"</td>"
-            markUp += "<td><a href='#' class='delete-file' id=file-"+item.id+" data-id="+item.id+">Delete</a></td></tr>"
+            markUp += "<td><a href='#' class='delete-file' id=file-"+item.id+"data-id="+item.id+">Delete</a></td>"
+            markUp += "<td><a href='#' class='share-url' id=file-"+item.id+" data-id="+item.id+" data-file-name="+item.file_name+">Share</a></td></tr>"
         });
         $("table tbody").append(markUp);
         $(".delete-file").click(delete_file);
+        $(".share-url").click(get_file_url);
+    }
+
+    function get_file_url(){
+        var assetId = $(this).data('id');
+        var file_name = $(this).data('file-name');
+
+        $.ajax({
+          type: "GET",
+          url: "/api/v1/get_signed_url?url_type=presigned_url&file_name="+file_name,
+          headers: {"Content-Type": "application/json"}
+        }).done(function(data) {
+            console.log( data );
+            alert(data.url);
+      });
     }
 
     function delete_file(){
@@ -72,10 +91,8 @@
        Bind listeners when the page loads.
     */
     (() => {
-      fetch_files();
-      $(".delete-file").click(delete_file);
+        fetch_files();
     })();
-
     </script>
   </body>
 </html>

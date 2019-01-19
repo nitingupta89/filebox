@@ -60,7 +60,7 @@
     */
     function getSignedRequest(file){
       const xhr = new XMLHttpRequest();
-      xhr.open('GET', '/api/v1/get_signed_url?file_name='+file.name+'&file_type='+file.type);
+      xhr.open('GET', '/api/v1/get_signed_url?url_type=presigned_post&file_name='+file.name+'&file_type='+file.type);
       xhr.onreadystatechange = () => {
         if(xhr.readyState === 4){
           if(xhr.status === 200){
