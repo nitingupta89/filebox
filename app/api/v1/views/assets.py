@@ -1,16 +1,18 @@
 import flask
 import json
 from flask import request
+from flask_security import current_user
 import flask_restful as restful
+
+from app.models.asset import Asset
 
 
 class AssetsView(restful.Resource):
 
     def post(self):
-        import pdb; pdb.set_trace()
-
-        Asset.create(file_name=file_name, file_type=file_type,
-                      file_url=file_url, user=current_user)
+        kwargs = request.json
+        kwargs['user'] = current_user
+        Asset.create(**kwargs)
 
 
         return flask.make_response(

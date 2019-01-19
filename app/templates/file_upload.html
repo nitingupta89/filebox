@@ -1,4 +1,7 @@
 <html>
+  <head>
+    <script src="https://code.jquery.com/jquery-3.3.1.js" crossorigin="anonymous"></script>
+  </head>
   <body>
 
     <h1>Upload your file</h1>
@@ -8,9 +11,9 @@
     <p id="status">Please select a file</p>
     <p><input type="file" id="file-input"></p>
     <form>
-      <input type="hidden" id="file-url" name="file-url">
-      <p><input type="text" id="file-name" name="file-name" readonly=readonly></p>
-      <p><input type="text" id="file-type" name="file-type" readonly=readonly></p>
+      <input type="hidden" id="file-url" name="file_url">
+      <p><input type="text" id="file-name" name="file_name" readonly=readonly></p>
+      <p><input type="text" id="file-type" name="file_type" readonly=readonly></p>
       <p><input type="submit" value="Upload file" id="submit-btn" disabled=disabled></p>
     </form>
 
@@ -87,14 +90,29 @@
 
     function createFile(evt){
       evt.preventDefault();
-      xhr = new XMLHttpRequest();
-      xhr.onreadystatechange=function() {
-        if (request.readyState == 4 && request.status == 200) {
-          alert("File uploaded successfully");
-        }
-        xhr.open('POST', '/api/v1/assets);
-      }
+
+        $.ajax({
+          type: "POST",
+          url: "api/v1/assets",
+          data: toJSONString($(this)),
+          headers: {"Content-Type": "application/json"}
+        }).done(function(data) {
+            alert("file uploaded successfully");
+            $('form')[0].reset();
+        console.log( "Data Loaded: " + data );
+      });
     }
+
+    function toJSONString( form ) {
+        obj = {};
+        formArr = form.serializeArray()
+        for(idx in formArr) {
+            ob = formArr[idx];
+            obj[ob.name] = ob.value;
+        }
+
+		return JSON.stringify( obj );
+	}
 
     /*
        Bind listeners when the page loads.
@@ -102,7 +120,7 @@
     (() => {
       document.getElementById('file-input').onchange = initUpload;
 
-      document.getElementById('submit-btn').addEventListener('click', createFile);
+      $('form').submit(createFile);
     })();
 
     </script>
