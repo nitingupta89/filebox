@@ -13,3 +13,4 @@ Flask-SQLAlchemy
 Flask-Migrate
 flask-marshmallow
 marshmallow-sqlalchemy
+bitly_api
