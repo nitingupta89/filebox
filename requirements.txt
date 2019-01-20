@@ -1,5 +1,5 @@
 boto3
-Flask
+Flask==0.11.0
 Flask-RESTful
 Flask-Dance[sqla]
 Flask-Security
@@ -14,3 +14,4 @@ Flask-Migrate
 flask-marshmallow
 marshmallow-sqlalchemy
 bitly_api
+psycopg2-binary

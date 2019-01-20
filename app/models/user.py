@@ -1,10 +1,11 @@
 import datetime
 
 from app import db
+from flask_login import UserMixin
 from sqlalchemy.dialects.postgresql import JSON
 
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
