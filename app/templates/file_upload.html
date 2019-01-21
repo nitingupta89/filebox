@@ -43,7 +43,6 @@
             document.getElementById('file-type').value = file_type;
             document.getElementById('file-url').value = url;
             document.getElementById('submit-btn').disabled = false;
-            document.getElementById('file-input').value = null;
           }
           else{
             alert('Could not upload file.');
@@ -98,8 +97,9 @@
           headers: {"Content-Type": "application/json"}
         }).done(function(data) {
             alert("file uploaded successfully");
+            document.getElementById('file-input').value = null;
             $('form')[0].reset();
-        console.log( "Data Loaded: " + data );
+            console.log( "Data Loaded: " + data );
       });
     }
 

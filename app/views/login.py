@@ -11,6 +11,7 @@ from flask import flash
 
 from app.models.user import User
 from app.models.oauth import OAuth
+from app.middlewares.auth import login_required
 from app import flask_app, db, google_bp, login_manager
 
 
@@ -91,6 +92,7 @@ def google_logged_in(blueprint, token):
 
 
 @flask_app.route("/logout")
+@login_required
 def logout():
     # session.clear()
     logout_user()    

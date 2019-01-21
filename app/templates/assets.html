@@ -47,9 +47,9 @@
     function create_list(data) {
         markUp = "";
         data.forEach(function(item){
-            markUp += "<tr><td><a href="+item.file_url+">"+item.file_name+"</a></td>"
+            markUp += "<tr><td>"+item.file_name+"</td>"
             markUp += "<td>"+item.file_type+"</td>"
-            markUp += "<td><a href='#' class='delete-file' id=file-"+item.id+"data-id="+item.id+">Delete</a></td>"
+            markUp += "<td><a href='#' class='delete-file' id=file-"+item.id+" data-id="+item.id+">Delete</a></td>"
             markUp += "<td><a href='#' class='share-url' id=file-"+item.id+" data-id="+item.id+" data-file-name="+item.file_name+">Share</a></td></tr>"
         });
         $("table tbody").append(markUp);
