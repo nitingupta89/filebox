@@ -15,6 +15,11 @@ from app.middlewares.auth import login_required
 from app import flask_app, db, google_bp, login_manager
 
 
+@flask_app.route("/login")
+def login():
+    return render_template('login.html')
+
+
 @flask_app.route("/login/google/authorized")
 def g_authorized():
     return redirect(url_for("upload_file"))
@@ -96,4 +101,4 @@ def google_logged_in(blueprint, token):
 def logout():
     # session.clear()
     logout_user()    
-    return redirect(url_for("google.login"))
+    return redirect(url_for("login"))
